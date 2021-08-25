@@ -1,0 +1,14 @@
+https://typesetter.xyz {
+	tls jm@jmazz.ca
+	proxy / http://app:3000
+}
+
+https://api.typesetter.xyz {
+	tls jm@jmazz.ca
+	proxy / http://api:3000
+}
+
+db.typesetter.xyz {
+	tls jm@jmazz.ca
+	proxy / http://mongo-express:8081
+}

@@ -1,0 +1,50 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: mongo-express
+  labels:
+    app: {{ .Chart.Name }}
+    component: mongo-express
+    chart: {{ printf "%s-%s" .Chart.Name .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+      component: mongo-express
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+        component: mongo-express
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: mongo-express
+        image: mongo-express:0.49.0
+        ports:
+        - name: http
+          containerPort: 8081
+        env:
+        - name: ME_CONFIG_MONGODB_SERVER
+          value: mongodb
+        - name: ME_CONFIG_MONGODB_AUTH_DATABASE
+          value: typesetter
+        - name: ME_CONFIG_MONGODB_AUTH_USERNAME
+          value: typesetter
+        - name: ME_CONFIG_MONGODB_AUTH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongodb
+              key: mongodb-password
+        - name: ME_CONFIG_MONGODB_ENABLE_ADMIN
+          value: "false"
+        - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+          value: root
+        - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongodb
+              key: mongodb-root-password

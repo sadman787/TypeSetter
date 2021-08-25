@@ -1,0 +1,97 @@
+version: '3.7'
+
+services:
+  app:
+    build:
+      context: ./app
+    ports:
+      - "4000:3000"
+    command: [ 'npm', 'run', 'start' ]
+    volumes:
+      - ./app:/opt/typesetter
+    user: "${UID:-1000}:${GID:-100}"
+    networks:
+      - frontend
+      - proxy
+    environment:
+      - "NODE_ENV=${NODE_ENV:-development}"
+      - "REACT_APP_API_URL=${REACT_APP_API_URL:-http://localhost:3000}"
+
+  api:
+    build:
+      context: ./api
+    ports:
+      - "3000:3000"
+    # command: [ 'node', '/opt/typesetter/src/api.js' ]
+    volumes:
+      - ./api:/opt/typesetter
+    user: "${UID:-1000}:${GID:-100}"
+    networks:
+      - backend
+      - proxy
+    environment:
+      - "LOG_LEVEL=${API_LOG_LEVEL:-debug}"
+      - "NODE_ENV=${NODE_ENV:-development}"
+      - "JWT_AUDIENCE=${JWT_AUDIENCE:-http://localhost:3000}"
+      - "JWT_ISSUER=${JWT_ISSUER:-TypeSetter App}"
+      - "JWT_SECRET=${JWT_SECRET:-secretsauce}"
+      - "MONGODB_HOST=mongodb"
+      - "MONGODB_DATABASE=${MONGODB_DATABASE:-typesetter}"
+      - "MONGODB_USERNAME=${MONGODB_USERNAME:-typesetter}"
+      - "MONGODB_PASSWORD=${MONGODB_PASSWORD:-password}"
+
+  mongodb:
+    image: bitnami/mongodb:3.6.8
+    networks:
+      - backend
+    environment:
+      - "MONGODB_ROOT_PASSWORD=${MONGODB_ROOT_PASSWORD:-password}"
+      - "MONGODB_DATABASE=${MONGODB_DATABASE:-typesetter}"
+      - "MONGODB_USERNAME=${MONGODB_USERNAME:-typesetter}"
+      - "MONGODB_PASSWORD=${MONGODB_PASSWORD:-password}"
+    # Uncomment this if you want to access mongodb://localhost:27017
+    # ports:
+    #   - "27017:27017"
+    volumes:
+      - mongodb-bitnami:/bitnami
+
+  mongo-express:
+    image: mongo-express:0.49.0
+    ports:
+      - "8081:8081"
+    environment:
+      - "ME_CONFIG_MONGODB_SERVER=mongodb"
+      - "ME_CONFIG_MONGODB_AUTH_DATABASE=${MONGODB_DATABASE:-typesetter}"
+      - "ME_CONFIG_MONGODB_AUTH_USERNAME=${MONGODB_USERNAME:-typesetter}"
+      - "ME_CONFIG_MONGODB_AUTH_PASSWORD=${MONGODB_PASSWORD:-password}"
+      - "ME_CONFIG_MONGODB_ENABLE_ADMIN=${ME_CONFIG_MONGODB_ENABLE_ADMIN:-false}"
+      - "ME_CONFIG_MONGODB_ADMINUSERNAME=root"
+      - "ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGODB_ROOT_PASSWORD:-password}"
+    networks:
+      - backend
+      - proxy
+
+  caddy:
+    image: abiosoft/caddy
+    volumes:
+      - ./Caddyfile.prod:/etc/Caddyfile
+      - ./caddy-data:/root/.caddy
+    environment:
+      - "ACME_AGREE=true"
+    networks:
+      - proxy
+    ports:
+      - "80:80"
+      - "443:443"
+
+networks:
+  backend:
+    driver: bridge
+  frontend:
+    driver: bridge
+  proxy:
+    driver: bridge
+
+volumes:
+  mongodb-bitnami:
+    driver: local

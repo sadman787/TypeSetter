@@ -1,0 +1,48 @@
+.edit{
+    margin: 0 auto;
+    position: relative;
+    padding: 0;
+    top: 10px;
+    left: 75%;
+}
+
+.save{
+    margin: 0 auto;
+    position: relative;
+    padding: 0;
+    top: 0px;
+    left: 70%;
+}
+
+.post{
+    margin: 0 auto;
+    width: 60vw;
+}
+
+.comments{
+    width: 160%;
+}
+
+.addComment{
+    width: 50vw;
+
+}
+
+.text{
+    margin: 16px auto;
+	border: 1px solid #eee;
+	box-shadow: 0 2px 3px #ccc;
+	padding: 16px;
+	text-align: centre;
+	cursor: pointer;
+}
+
+.content{
+    width: 55vw;
+	margin: 16px auto;
+	border: 1px solid #eee;
+	box-shadow: 0 2px 3px #ccc;
+	padding: 16px;
+	text-align: centre;
+	cursor: pointer;
+}

@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: typesetter-node-src
+data:
+  api.js: |
+    const http = require('http')
+
+    http.createServer((request, response) => {
+      response.end('hello world!')
+    }).listen('3000').on('listening', () => console.log('ready'))

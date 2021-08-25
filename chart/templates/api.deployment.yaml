@@ -1,0 +1,71 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: api
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Chart.Name }}
+    component: api
+    chart: {{ printf "%s-%s" .Chart.Name .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+      component: api
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+        component: api
+        release: {{ .Release.Name }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/api.cm.yml") . | sha256sum }}
+    spec:
+      volumes:
+      - name: src
+        configMap:
+          name: typesetter-node-src
+      containers:
+        - name: api
+          image: {{ printf "%s:%s" .Values.api.image.repository .Values.api.image.tag }}
+          # command: [ "node", "/src/api.js" ]
+          command:
+            - /bin/sh
+            - -c
+            - |
+              npm install -g nodemon
+
+              mkdir /src
+              echo "console.log('hello world')" > /src/api.js
+              nodemon -w /src /src/api.js
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          # volumeMounts:
+          # - mountPath: /src
+          #   name: src
+          ports:
+          - name: http
+            containerPort: 3000
+            protocol: TCP
+          env:
+          - name: MONGODB_SERVER
+            value: mongodb
+          - name: MONGODB_DB
+            value: typesetter
+          - name: MONGODB_USERNAME
+            value: typesetter
+          - name: MONGODB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mongodb
+                key: mongodb-password
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http

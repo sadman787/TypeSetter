@@ -1,0 +1,29 @@
+React was used for this project. The .js and .css files can be found in the develop branch under /app/src.
+
+After starting up index.html, you will see the landing page which prompts you to sign in or register. You can choose to login with predefined credentials or register an account yourself and sign in with it. After signing in, the first thing that you will see as both a user or an admin is the feed. the will be the feedyou can return back to the landing page by click the logo, "Typsesetter" on the top right.
+
+NOTE: To access navigation bar items which appear at the top of the page, please click directly on the text.
+
+User credentials:
+Random users are generated each time the app is opened. So to sign in as a user, expand the first Object that appears in the console and use those credentials.
+
+User features:
+-Profile:
+  -From their Profile, users will be able to change and save their email, username and password
+  -From the Feed, users will be able to see the posts that they, as well as others, have made.
+  -From the Feed, users will be able to make posts by inputting text into the text box and    clicking on the "Post" button.
+    -Users are also able to enter LaTeX code to enhance their posts.
+    -NOTE: For now, new posts are appearing at the bottom of the feed.
+  -Clicking on the "Comments" button of any post in the feed will allow users to see what    comments people have made on the post.
+    -NOTE: Currently unable to make comments yourself.
+
+Admin credentials:
+Username: bob
+Password: password
+
+Admin features:
+-All the same features as a user
+-An Admin tab appears in the navigation bar that leads to the admin page.
+-In the Admin page, there are two tables, the first table is of all the users and the second  table is of all the posts that have been made.
+  -From these tables the admin is able to remove any post or delete any user that they wish.
+  -NOTE: currently unable to edit users or posts.

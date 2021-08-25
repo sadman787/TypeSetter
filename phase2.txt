@@ -1,0 +1,88 @@
+App URL: typesetter.xyz
+
+Feature changes:
+    - Automatic redirect and login (can visit /profile, will redirect to login page, after logging in will redirect you to /profile)
+    - JWT based authentication and authorization (JWT subject is User._id)
+    - modifying properties of your user profile
+    - state management across components/pages via Unstated (change your username in profile, and you will see username in navigation bar change too)
+    - blocking
+    - follow/unfollow
+    - creating a post
+    - adding comments
+
+
+Normal User:
+    Login Credentials:
+        email: bob@mail.com
+        password: password
+
+Admin User:
+    Login Credentials:
+        email: admin@typesetter.xyz
+        password: password
+
+    Extra features:
+        - shows admin on nav bar
+        - can delete posts and users but not themselves
+        - can edit any post or user information
+
+Instructions:
+
+After opening the link typesetter.xyz, you will see the home page which has a form for you to sign in or register.
+You can either register a new user then sign in using them, or sign in using the credentials provided above.
+Note that when registering a new user you have to provide a properly formatted email, and the username has to be
+more than 3 characters long
+
+After signing in, the first thing that you will see as both a user or an admin is the posts feed.
+
+NOTE: To access navigation bar items which appear at the top of the page, please click directly on the text.
+
+
+On the feed page you can click on a username of a post which will take you to that users profile page.
+There you can follow/unfollow that user if you are a normal user, or change their info if you are an admin.
+
+If you click on the comments of a post, this will take you to a page where the post and its comments are displayed. 
+If you clicked on a post the logged in user created or the logged in user is an admin you will also be able to edit the post. 
+You can also add comments to the post at the bottom of this page.
+
+From the navbar you should be able to go to your own profile and change your own information.
+
+You can also see the list of users you are following, or your followers or your blocked users.
+In the list of followers you can block users.
+In the list of following you can unfollow users.
+In the list of blocked user you can unblock users.
+
+If you are signed in as an admin you will also get an admin button in the navbar which will take
+you to a table of all users and posts. There you can remove and edit users and posts by clicking on the respective buttons.
+
+Express routes
+
+user routes
+GET /users       -> gets all users
+GET /users/:id   -> gets a user with id
+POST /users      -> adds new user
+PATCH /user/:id  -> patch user with id
+DELETE /user/:id -> delete a user with id
+
+post routes
+GET /posts -> get all posts
+GET /posts/:id -> get post with id
+GET /posts/user/:id -> get posts with user with id
+GET /posts/followed/:id/:page -> gets page number :page of posts of the people user with :id follows
+POST /posts -> adds new post
+PATCH /posts/comment/:id -> add comment to post with id
+PATCH /posts/:id -> patch a post with id
+DELETE /posts/:id -> delete a post with id
+
+following routes
+
+POST /following/:uid/:fid -> make user with uid follow user with fid
+POST /following/unfollow/:uid/:fid -> make user with uid stop following user with fid
+
+blocking routes
+
+POST /block/block/:uid/:fid -> user with uid blocks user with fid
+POST /block/unblock -> user with uid unblocks user with fid
+
+POST /auth/login -> user login request
+POST /auth/signup -> sign up new user

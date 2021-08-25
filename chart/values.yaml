@@ -1,0 +1,23 @@
+nameOverride: ""
+fullnameOverride: ""
+
+api:
+  image:
+    repository: node
+    tag: 11.2.0
+    pullPolicy: IfNotPresent
+  service:
+    port: 80
+
+mongodb:
+  existingSecret: mongodb
+  nameOverride: typesetter
+  fullnameOverride: mongodb
+  mongodbUsername: typesetter
+  mongodbDatabase: typesetter
+  podLabels:
+    app: typesetter
+    component: mongodb
+  persistence:
+    storageClass: openebs-jiva-default
+    size: 1Gi

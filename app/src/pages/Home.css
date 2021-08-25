@@ -1,0 +1,14 @@
+#title {
+    padding-left: 50px;
+    padding-top: 30px;
+}
+
+h2 {
+    color: blue;
+    font-size: 40px
+}
+
+#login{
+    position: absolute;
+    top: 100px
+}
